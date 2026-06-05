@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - Lista de Tarefas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>📝 Lista de Tarefas <span class="version">v2.0</span></h1>
+            <p class="subtitle">Desenvolvido com <a href="https://kiro.dev" target="_blank">Kiro AI</a> — Projeto de teste</p>
+        </header>
+
+        <!-- Formulário de Adicionar Tarefa -->
+        <section class="add-task-section">
+            <h2>Adicionar Nova Tarefa</h2>
+            <form id="form-tarefa" class="form-tarefa">
+                <div class="form-row">
+                    <input type="text" id="input-descricao" placeholder="Descrição da tarefa..." required>
+                    <button type="submit" class="btn btn-add">+ Adicionar</button>
+                </div>
+                <div class="form-row form-options">
+                    <div class="form-group">
+                        <label for="select-prioridade">Prioridade:</label>
+                        <select id="select-prioridade">
+                            <option value="baixa">🟢 Baixa</option>
+                            <option value="media" selected>🟡 Média</option>
+                            <option value="alta">🔴 Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-categoria">Categoria:</label>
+                        <input type="text" id="input-categoria" placeholder="geral" value="geral">
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Filtros -->
+        <section class="filtros-section">
+            <h2>Filtros</h2>
+            <div class="filtros">
+                <div class="filtro-grupo">
+                    <label>Status:</label>
+                    <select id="filtro-status">
+                        <option value="todas">Todas</option>
+                        <option value="pendentes">Pendentes</option>
+                        <option value="concluidas">Concluídas</option>
+                    </select>
+                </div>
+                <div class="filtro-grupo">
+                    <label>Prioridade:</label>
+                    <select id="filtro-prioridade">
+                        <option value="todas">Todas</option>
+                        <option value="alta">🔴 Alta</option>
+                        <option value="media">🟡 Média</option>
+                        <option value="baixa">🟢 Baixa</option>
+                    </select>
+                </div>
+                <div class="filtro-grupo">
+                    <label>Categoria:</label>
+                    <select id="filtro-categoria">
+                        <option value="todas">Todas</option>
+                    </select>
+                </div>
+                <div class="filtro-grupo filtro-busca">
+                    <label>Buscar:</label>
+                    <input type="text" id="filtro-busca" placeholder="Buscar tarefas...">
+                </div>
+            </div>
+        </section>
+
+        <!-- Estatísticas -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-numero" id="stat-total">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat-card stat-pendente">
+                    <span class="stat-numero" id="stat-pendentes">0</span>
+                    <span class="stat-label">Pendentes</span>
+                </div>
+                <div class="stat-card stat-concluida">
+                    <span class="stat-numero" id="stat-concluidas">0</span>
+                    <span class="stat-label">Concluídas</span>
+                </div>
+                <div class="stat-card stat-progresso">
+                    <span class="stat-numero" id="stat-percentual">0%</span>
+                    <span class="stat-label">Progresso</span>
+                </div>
+            </div>
+            <div class="barra-progresso">
+                <div class="barra-progresso-fill" id="barra-progresso-fill"></div>
+            </div>
+        </section>
+
+        <!-- Lista de Tarefas -->
+        <section class="lista-section">
+            <div class="lista-header">
+                <h2>Tarefas</h2>
+                <span class="contador" id="contador-tarefas">0 tarefas</span>
+            </div>
+            <div class="lista-tarefas" id="lista-tarefas">
+                <p class="lista-vazia" id="lista-vazia">📭 Nenhuma tarefa encontrada.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Desenvolvido com ✨ <a href="https://kiro.dev" target="_blank">Kiro AI</a> — Projeto de teste da tecnologia</p>
+            <p>Dados salvos localmente no navegador (localStorage)</p>
+        </footer>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div class="modal-overlay" id="modal-editar" hidden>
+        <div class="modal">
+            <h3>✏️ Editar Tarefa</h3>
+            <form id="form-editar">
+                <input type="hidden" id="editar-id">
+                <div class="form-group">
+                    <label for="editar-descricao">Descrição:</label>
+                    <input type="text" id="editar-descricao" required>
+                </div>
+                <div class="form-group">
+                    <label for="editar-prioridade">Prioridade:</label>
+                    <select id="editar-prioridade">
+                        <option value="baixa">🟢 Baixa</option>
+                        <option value="media">🟡 Média</option>
+                        <option value="alta">🔴 Alta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editar-categoria">Categoria:</label>
+                    <input type="text" id="editar-categoria">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-salvar">Salvar</button>
+                    <button type="button" class="btn btn-cancelar" id="btn-cancelar-editar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

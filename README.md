@@ -1,42 +1,53 @@
-# Todo App - Lista de Tarefas em Python
+# Todo App - Lista de Tarefas
 
-> **Este projeto foi inteiramente desenvolvido utilizando o [Kiro](https://kiro.dev), o assistente de desenvolvimento com IA da AWS.  
+> **🤖 Este projeto foi inteiramente desenvolvido utilizando o [Kiro](https://kiro.dev), o assistente de desenvolvimento com IA da AWS.  
 > Trata-se de um projeto de teste para explorar as capacidades desta tecnologia na criação de software de forma colaborativa e assistida por inteligência artificial.**
 
 ---
 
-## Sobre o Projeto
+## 🌐 Versão Web (GitHub Pages)
 
-Uma aplicação de lista de tarefas via linha de comando (CLI) desenvolvida em Python, com funcionalidades completas de gerenciamento, filtros, busca e estatísticas.
+A versão web está disponível online via GitHub Pages:
 
-## Funcionalidades
+🔗 **[https://thiago574.github.io/todo-app/web/](https://thiago574.github.io/todo-app/web/)**
 
-| Funcionalidade | Descrição |
-|----------------|-----------|
-| Adicionar tarefas | Cria tarefas com descrição, prioridade e categoria |
-| Listar tarefas | Exibe todas as tarefas em formato de tabela |
-| Concluir tarefas | Marca tarefas como concluídas com registro de data |
-| Remover tarefas | Remove tarefas com confirmação |
-| Editar tarefas | Altera descrição, prioridade ou categoria |
-| Buscar tarefas | Pesquisa por texto na descrição |
-| Filtrar por status | Mostra apenas pendentes ou concluídas |
-| Filtrar por prioridade | Filtra por alta, média ou baixa |
-| Filtrar por categoria | Filtra por categorias personalizadas |
-| Estatísticas | Exibe progresso, contagens e barra visual |
+### Como ativar o GitHub Pages:
 
-## Prioridades
+1. Acesse o repositório no GitHub
+2. Vá em **Settings** → **Pages**
+3. Em "Source", selecione **Deploy from a branch**
+4. Escolha a branch `projeto-todo-app` e pasta `/ (root)`
+5. Clique em **Save**
+6. Aguarde alguns minutos e acesse o link acima
 
-- 🔴 **Alta** — Tarefas urgentes
-- 🟡 **Média** — Prioridade padrão
-- 🟢 **Baixa** — Podem esperar
+---
 
-## Como usar
+## 📁 Estrutura do Projeto
+
+```
+todo-app/
+├── main.py              # CLI em Python - Interface interativa
+├── todo.py              # CLI em Python - Módulo de lógica
+├── README.md            # Documentação
+└── web/                 # Versão Web (GitHub Pages)
+    ├── index.html       # Estrutura da página
+    ├── style.css        # Estilos e design responsivo
+    └── app.js           # Lógica da aplicação (JavaScript)
+```
+
+---
+
+## 🐍 Versão Python (CLI)
+
+Aplicação de linha de comando para gerenciamento de tarefas.
+
+### Como executar:
 
 ```bash
 python main.py
 ```
 
-## Menu da Aplicação
+### Menu da CLI:
 
 ```
 ==================================================
@@ -56,30 +67,80 @@ python main.py
 ==================================================
 ```
 
-## Estrutura do Projeto
+---
 
+## 🌐 Versão Web (HTML/CSS/JS)
+
+Interface moderna e responsiva que roda diretamente no navegador, sem necessidade de servidor.
+
+### Tecnologias:
+
+- **HTML5** — Estrutura semântica
+- **CSS3** — Design responsivo com variáveis CSS, grid, flexbox e animações
+- **JavaScript (ES6+)** — Lógica da aplicação com localStorage
+
+### Para rodar localmente:
+
+Basta abrir o arquivo `web/index.html` no navegador, ou usar um servidor local:
+
+```bash
+cd web
+python -m http.server 8000
+# Acesse: http://localhost:8000
 ```
-todo-app/
-├── main.py          # Interface CLI interativa
-├── todo.py          # Módulo de lógica (CRUD + filtros + estatísticas)
-├── tarefas.json     # Dados persistidos (criado automaticamente)
-└── README.md        # Documentação
-```
+
+---
+
+## ✨ Funcionalidades (ambas as versões)
+
+| Funcionalidade | Descrição |
+|----------------|-----------|
+| ➕ Adicionar tarefas | Cria tarefas com descrição, prioridade e categoria |
+| 📋 Listar tarefas | Exibe todas as tarefas em formato organizado |
+| ✅ Concluir tarefas | Marca tarefas como concluídas com registro de data |
+| 🗑️ Remover tarefas | Remove tarefas com confirmação |
+| ✏️ Editar tarefas | Altera descrição, prioridade ou categoria |
+| 🔍 Buscar tarefas | Pesquisa por texto na descrição |
+| 🗂️ Filtrar por status | Mostra apenas pendentes ou concluídas |
+| 🎯 Filtrar por prioridade | Filtra por alta, média ou baixa |
+| 🏷️ Filtrar por categoria | Filtra por categorias personalizadas |
+| 📊 Estatísticas | Progresso, contagens e barra visual |
+
+## Prioridades
+
+- 🔴 **Alta** — Tarefas urgentes
+- 🟡 **Média** — Prioridade padrão
+- 🟢 **Baixa** — Podem esperar
+
+---
+
+## 💾 Armazenamento
+
+| Versão | Método |
+|--------|--------|
+| Python (CLI) | Arquivo `tarefas.json` local |
+| Web | `localStorage` do navegador |
+
+---
 
 ## Requisitos
 
-- Python 3.10+
+- **Python CLI:** Python 3.10+
+- **Web:** Navegador moderno (Chrome, Firefox, Edge, Safari)
 
-## Desenvolvido com Kiro
+---
 
-Este projeto é uma demonstração prática do uso do **Kiro** como ferramenta de desenvolvimento assistido por IA. Todo o código — da concepção à implementação — foi gerado de forma colaborativa com o Kiro, incluindo:
+## 🤖 Desenvolvido com Kiro
 
-- Estruturação do projeto
-- Implementação das funcionalidades
-- Evolução e refatoração do código
-- Testes de validação
-- Documentação
-- Versionamento e push para o GitHub
+Este projeto é uma demonstração prática do uso do **[Kiro](https://kiro.dev)** como ferramenta de desenvolvimento assistido por IA. Todo o código — da concepção à implementação — foi gerado de forma colaborativa com o Kiro, incluindo:
+
+- ✅ Estruturação do projeto (Python + Web)
+- ✅ Implementação das funcionalidades
+- ✅ Evolução e refatoração do código
+- ✅ Design responsivo e moderno
+- ✅ Testes de validação
+- ✅ Documentação completa
+- ✅ Versionamento e deploy no GitHub
 
 O objetivo é testar e demonstrar como a IA pode acelerar o processo de desenvolvimento de software, mantendo a qualidade e organização do código.
 
