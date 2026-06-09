@@ -147,3 +147,7 @@ O objetivo é testar e demonstrar como a IA pode acelerar o processo de desenvol
 ---
 
 *Projeto criado em Junho/2026 como teste da tecnologia Kiro.*
+
+---
+
+> 🧪 Teste de conexão Git realizado em 09/06/2026 via Kiro IDE.
