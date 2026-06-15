@@ -76,8 +76,11 @@ Interface moderna e responsiva que roda diretamente no navegador, sem necessidad
 ### Tecnologias:
 
 - **HTML5** — Estrutura semântica
-- **CSS3** — Design responsivo com variáveis CSS, grid, flexbox e animações
+- **Tailwind CSS** — Framework utility-first (via CDN) com design system moderno
 - **JavaScript (ES6+)** — Lógica da aplicação com localStorage
+- **Google Fonts (Inter)** — Tipografia moderna
+- **Lucide Icons** — Iconografia SVG leve e consistente
+- **Dark Mode** — Suporte nativo a tema escuro/claro
 
 ### Para rodar localmente:
 

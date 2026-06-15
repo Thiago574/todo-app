@@ -1,151 +1,304 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App - Lista de Tarefas</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'scale-in': 'scaleIn 0.2s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 3px; }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(30, 30, 50, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Theme toggle transition */
+        html { transition: background-color 0.3s ease, color 0.3s ease; }
+    </style>
 </head>
-<body>
-    <div class="container">
+<body class="bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-indigo-950 min-h-screen font-sans text-gray-800 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Background decorative blobs -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-30 animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-300 dark:bg-indigo-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-30 animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-200 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 4s;"></div>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-4 py-8 relative">
+
         <!-- Header -->
-        <header class="header">
-            <h1>📝 Lista de Tarefas <span class="version">v2.0</span></h1>
-            <p class="subtitle">Desenvolvido com <a href="https://kiro.dev" target="_blank">Kiro AI</a> — Projeto de teste</p>
+        <header class="text-center mb-8 animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div></div>
+                <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                    Lista de Tarefas
+                </h1>
+                <button id="btn-theme" class="p-2 rounded-xl hover:bg-white/50 dark:hover:bg-white/10 transition-colors" title="Alternar tema">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-yellow-400"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-indigo-600"></i>
+                </button>
+            </div>
+            <div class="flex items-center justify-center gap-2">
+                <span class="px-2.5 py-0.5 text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full">v3.0</span>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Desenvolvido com <a href="https://kiro.dev" target="_blank" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Kiro AI</a>
+                </p>
+            </div>
         </header>
 
         <!-- Formulário de Adicionar Tarefa -->
-        <section class="add-task-section">
-            <h2>Adicionar Nova Tarefa</h2>
-            <form id="form-tarefa" class="form-tarefa">
-                <div class="form-row">
-                    <input type="text" id="input-descricao" placeholder="Descrição da tarefa..." required>
-                    <button type="submit" class="btn btn-add">+ Adicionar</button>
+        <section class="glass rounded-2xl p-6 mb-5 shadow-lg shadow-indigo-500/5 animate-slide-up">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="w-4 h-4 text-indigo-500"></i>
+                Nova Tarefa
+            </h2>
+            <form id="form-tarefa" class="space-y-3">
+                <div class="flex gap-3">
+                    <input type="text" id="input-descricao" placeholder="O que precisa ser feito?"
+                        class="flex-1 px-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm placeholder:text-gray-400"
+                        required>
+                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all hover:-translate-y-0.5 active:translate-y-0 text-sm flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Adicionar
+                    </button>
                 </div>
-                <div class="form-row form-options">
-                    <div class="form-group">
-                        <label for="select-prioridade">Prioridade:</label>
-                        <select id="select-prioridade">
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                        <label for="select-prioridade" class="text-xs font-medium text-gray-500 dark:text-gray-400">Prioridade:</label>
+                        <select id="select-prioridade" class="px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
                             <option value="baixa">🟢 Baixa</option>
                             <option value="media" selected>🟡 Média</option>
                             <option value="alta">🔴 Alta</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="input-categoria">Categoria:</label>
-                        <input type="text" id="input-categoria" placeholder="geral" value="geral">
+                    <div class="flex items-center gap-2">
+                        <label for="input-categoria" class="text-xs font-medium text-gray-500 dark:text-gray-400">Categoria:</label>
+                        <input type="text" id="input-categoria" placeholder="geral" value="geral"
+                            class="px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all w-28">
                     </div>
                 </div>
             </form>
         </section>
 
         <!-- Filtros -->
-        <section class="filtros-section">
-            <h2>Filtros</h2>
-            <div class="filtros">
-                <div class="filtro-grupo">
-                    <label>Status:</label>
-                    <select id="filtro-status">
+        <section class="glass rounded-2xl p-6 mb-5 shadow-lg shadow-indigo-500/5 animate-slide-up" style="animation-delay: 0.1s;">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center gap-2">
+                <i data-lucide="filter" class="w-4 h-4 text-indigo-500"></i>
+                Filtros
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="space-y-1">
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400">Status</label>
+                    <select id="filtro-status" class="w-full px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
                         <option value="todas">Todas</option>
                         <option value="pendentes">Pendentes</option>
                         <option value="concluidas">Concluídas</option>
                     </select>
                 </div>
-                <div class="filtro-grupo">
-                    <label>Prioridade:</label>
-                    <select id="filtro-prioridade">
+                <div class="space-y-1">
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400">Prioridade</label>
+                    <select id="filtro-prioridade" class="w-full px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
                         <option value="todas">Todas</option>
                         <option value="alta">🔴 Alta</option>
                         <option value="media">🟡 Média</option>
                         <option value="baixa">🟢 Baixa</option>
                     </select>
                 </div>
-                <div class="filtro-grupo">
-                    <label>Categoria:</label>
-                    <select id="filtro-categoria">
+                <div class="space-y-1">
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400">Categoria</label>
+                    <select id="filtro-categoria" class="w-full px-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
                         <option value="todas">Todas</option>
                     </select>
                 </div>
-                <div class="filtro-grupo filtro-busca">
-                    <label>Buscar:</label>
-                    <input type="text" id="filtro-busca" placeholder="Buscar tarefas...">
+                <div class="space-y-1">
+                    <label class="text-xs font-medium text-gray-500 dark:text-gray-400">Buscar</label>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="filtro-busca" placeholder="Pesquisar..."
+                            class="w-full pl-9 pr-3 py-2 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Estatísticas -->
-        <section class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-numero" id="stat-total">0</span>
-                    <span class="stat-label">Total</span>
+        <section class="glass rounded-2xl p-6 mb-5 shadow-lg shadow-indigo-500/5 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                <div class="text-center p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 hover:-translate-y-1 transition-transform">
+                    <span class="block text-2xl font-bold text-indigo-600 dark:text-indigo-400" id="stat-total">0</span>
+                    <span class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Total</span>
                 </div>
-                <div class="stat-card stat-pendente">
-                    <span class="stat-numero" id="stat-pendentes">0</span>
-                    <span class="stat-label">Pendentes</span>
+                <div class="text-center p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 hover:-translate-y-1 transition-transform">
+                    <span class="block text-2xl font-bold text-orange-500 dark:text-orange-400" id="stat-pendentes">0</span>
+                    <span class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Pendentes</span>
                 </div>
-                <div class="stat-card stat-concluida">
-                    <span class="stat-numero" id="stat-concluidas">0</span>
-                    <span class="stat-label">Concluídas</span>
+                <div class="text-center p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 hover:-translate-y-1 transition-transform">
+                    <span class="block text-2xl font-bold text-emerald-500 dark:text-emerald-400" id="stat-concluidas">0</span>
+                    <span class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Concluídas</span>
                 </div>
-                <div class="stat-card stat-progresso">
-                    <span class="stat-numero" id="stat-percentual">0%</span>
-                    <span class="stat-label">Progresso</span>
+                <div class="text-center p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 hover:-translate-y-1 transition-transform">
+                    <span class="block text-2xl font-bold text-blue-500 dark:text-blue-400" id="stat-percentual">0%</span>
+                    <span class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Progresso</span>
                 </div>
             </div>
-            <div class="barra-progresso">
-                <div class="barra-progresso-fill" id="barra-progresso-fill"></div>
+            <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-500 ease-out" id="barra-progresso-fill" style="width: 0%"></div>
             </div>
         </section>
 
         <!-- Lista de Tarefas -->
-        <section class="lista-section">
-            <div class="lista-header">
-                <h2>Tarefas</h2>
-                <span class="contador" id="contador-tarefas">0 tarefas</span>
+        <section class="glass rounded-2xl p-6 shadow-lg shadow-indigo-500/5 animate-slide-up" style="animation-delay: 0.3s;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                    <i data-lucide="list-checks" class="w-4 h-4 text-indigo-500"></i>
+                    Tarefas
+                </h2>
+                <span class="text-xs font-medium px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300" id="contador-tarefas">0 tarefas</span>
             </div>
-            <div class="lista-tarefas" id="lista-tarefas">
-                <p class="lista-vazia" id="lista-vazia">📭 Nenhuma tarefa encontrada.</p>
+            <div class="space-y-2" id="lista-tarefas">
+                <p class="text-center py-12 text-gray-400 dark:text-gray-500" id="lista-vazia">
+                    <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                    <span class="block text-sm">Nenhuma tarefa encontrada.</span>
+                </p>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="footer">
-            <p>Desenvolvido com ✨ <a href="https://kiro.dev" target="_blank">Kiro AI</a> — Projeto de teste da tecnologia</p>
-            <p>Dados salvos localmente no navegador (localStorage)</p>
+        <footer class="text-center py-6 mt-6">
+            <p class="text-xs text-gray-400 dark:text-gray-500">
+                Desenvolvido com ✨ <a href="https://kiro.dev" target="_blank" class="font-semibold text-indigo-500 hover:underline">Kiro AI</a> — Dados salvos no localStorage
+            </p>
         </footer>
     </div>
 
     <!-- Modal de Edição -->
-    <div class="modal-overlay" id="modal-editar" hidden>
-        <div class="modal">
-            <h3>✏️ Editar Tarefa</h3>
-            <form id="form-editar">
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4" id="modal-editar" hidden>
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="modal-backdrop"></div>
+        <div class="relative glass rounded-2xl p-6 w-full max-w-md shadow-2xl animate-scale-in">
+            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-5 flex items-center gap-2">
+                <i data-lucide="edit-3" class="w-5 h-5 text-indigo-500"></i>
+                Editar Tarefa
+            </h3>
+            <form id="form-editar" class="space-y-4">
                 <input type="hidden" id="editar-id">
-                <div class="form-group">
-                    <label for="editar-descricao">Descrição:</label>
-                    <input type="text" id="editar-descricao" required>
+                <div class="space-y-1">
+                    <label for="editar-descricao" class="text-xs font-medium text-gray-500 dark:text-gray-400">Descrição</label>
+                    <input type="text" id="editar-descricao" required
+                        class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm">
                 </div>
-                <div class="form-group">
-                    <label for="editar-prioridade">Prioridade:</label>
-                    <select id="editar-prioridade">
+                <div class="space-y-1">
+                    <label for="editar-prioridade" class="text-xs font-medium text-gray-500 dark:text-gray-400">Prioridade</label>
+                    <select id="editar-prioridade" class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm">
                         <option value="baixa">🟢 Baixa</option>
                         <option value="media">🟡 Média</option>
                         <option value="alta">🔴 Alta</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="editar-categoria">Categoria:</label>
-                    <input type="text" id="editar-categoria">
+                <div class="space-y-1">
+                    <label for="editar-categoria" class="text-xs font-medium text-gray-500 dark:text-gray-400">Categoria</label>
+                    <input type="text" id="editar-categoria"
+                        class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm">
                 </div>
-                <div class="modal-actions">
-                    <button type="submit" class="btn btn-salvar">Salvar</button>
-                    <button type="button" class="btn btn-cancelar" id="btn-cancelar-editar">Cancelar</button>
+                <div class="flex gap-3 justify-end pt-2">
+                    <button type="button" id="btn-cancelar-editar" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 transition-all text-sm">
+                        Salvar
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Theme toggle
+        const btnTheme = document.getElementById('btn-theme');
+        const html = document.documentElement;
+        
+        // Check saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            html.classList.remove('dark');
+        }
+
+        btnTheme.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            lucide.createIcons();
+        });
+
+        // Modal backdrop click
+        document.getElementById('modal-backdrop')?.addEventListener('click', () => {
+            document.getElementById('modal-editar').hidden = true;
+        });
+    </script>
 </body>
 </html>

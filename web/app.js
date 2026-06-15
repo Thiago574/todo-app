@@ -159,10 +159,9 @@ function renderizarTarefas() {
     const tarefas = carregarTarefas();
     const tarefasFiltradas = aplicarFiltros(tarefas);
     const lista = document.getElementById("lista-tarefas");
-    const listaVazia = document.getElementById("lista-vazia");
     const contador = document.getElementById("contador-tarefas");
 
-    // Limpar lista (manter apenas o elemento vazio)
+    // Limpar lista
     lista.innerHTML = "";
 
     if (tarefasFiltradas.length === 0) {
@@ -179,19 +178,39 @@ function renderizarTarefas() {
 
     atualizarEstatisticas();
     atualizarCategorias();
+    
+    // Re-initialize Lucide icons if available
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 }
 
 function criarElementoVazio() {
-    const p = document.createElement("p");
-    p.className = "lista-vazia";
-    p.textContent = "📭 Nenhuma tarefa encontrada.";
-    return p;
+    const div = document.createElement("div");
+    div.className = "text-center py-12 text-gray-400 dark:text-gray-500";
+    div.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+        <span class="block text-sm">Nenhuma tarefa encontrada.</span>
+    `;
+    return div;
 }
 
 function criarElementoTarefa(tarefa) {
     const div = document.createElement("div");
-    div.className = `tarefa-item prioridade-${tarefa.prioridade}${tarefa.concluida ? " concluida" : ""}`;
-    div.dataset.id = tarefa.id;
+    
+    const prioridadeBorder = {
+        alta: "border-l-red-400",
+        media: "border-l-yellow-400",
+        baixa: "border-l-emerald-400",
+    };
+    
+    const prioridadeBadge = {
+        alta: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300",
+        media: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300",
+        baixa: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300",
+    };
 
     const prioridadeEmoji = {
         alta: "🔴",
@@ -199,29 +218,45 @@ function criarElementoTarefa(tarefa) {
         baixa: "🟢",
     };
 
+    const baseClasses = `flex items-center gap-3 p-4 rounded-xl border-l-4 ${prioridadeBorder[tarefa.prioridade]} transition-all hover:shadow-md hover:translate-x-1 animate-slide-up`;
+    const bgClasses = tarefa.concluida 
+        ? "bg-emerald-50/50 dark:bg-emerald-900/10 opacity-70" 
+        : "bg-white/50 dark:bg-gray-800/50";
+    
+    div.className = `${baseClasses} ${bgClasses}`;
+    div.dataset.id = tarefa.id;
+
     div.innerHTML = `
-        <input type="checkbox" class="tarefa-checkbox" 
+        <input type="checkbox" class="w-5 h-5 rounded-md border-2 border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 cursor-pointer transition-all flex-shrink-0" 
                ${tarefa.concluida ? "checked" : ""} 
                title="Marcar como ${tarefa.concluida ? "pendente" : "concluída"}">
-        <div class="tarefa-conteudo">
-            <div class="tarefa-descricao">${escapeHtml(tarefa.descricao)}</div>
-            <div class="tarefa-meta">
-                <span class="tarefa-tag tag-prioridade-${tarefa.prioridade}">
+        <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium ${tarefa.concluida ? "line-through text-gray-400 dark:text-gray-500" : "text-gray-800 dark:text-gray-100"} break-words">${escapeHtml(tarefa.descricao)}</p>
+            <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full ${prioridadeBadge[tarefa.prioridade]}">
                     ${prioridadeEmoji[tarefa.prioridade]} ${tarefa.prioridade}
                 </span>
-                <span class="tarefa-tag">🏷️ ${escapeHtml(tarefa.categoria)}</span>
-                <span class="tarefa-tag">📅 ${tarefa.criada_em}</span>
-                ${tarefa.concluida_em ? `<span class="tarefa-tag">✅ ${tarefa.concluida_em}</span>` : ""}
+                <span class="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                    🏷️ ${escapeHtml(tarefa.categoria)}
+                </span>
+                <span class="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                    📅 ${tarefa.criada_em}
+                </span>
+                ${tarefa.concluida_em ? `<span class="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">✅ ${tarefa.concluida_em}</span>` : ""}
             </div>
         </div>
-        <div class="tarefa-acoes">
-            <button class="btn-acao btn-editar" title="Editar">✏️</button>
-            <button class="btn-acao btn-remover" title="Remover">🗑️</button>
+        <div class="flex gap-1 flex-shrink-0">
+            <button class="btn-editar p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400 transition-all" title="Editar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </button>
+            <button class="btn-remover p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-all" title="Remover">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
         </div>
     `;
 
     // Event listeners
-    const checkbox = div.querySelector(".tarefa-checkbox");
+    const checkbox = div.querySelector("input[type='checkbox']");
     checkbox.addEventListener("change", () => {
         concluirTarefa(tarefa.id);
         renderizarTarefas();
@@ -284,6 +319,7 @@ function abrirModalEditar(tarefa) {
     document.getElementById("editar-prioridade").value = tarefa.prioridade;
     document.getElementById("editar-categoria").value = tarefa.categoria;
     modal.hidden = false;
+    document.getElementById("editar-descricao").focus();
 }
 
 function fecharModalEditar() {
@@ -343,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fechar modal clicando fora
     document.getElementById("modal-editar").addEventListener("click", (e) => {
-        if (e.target.classList.contains("modal-overlay")) {
+        if (e.target === document.getElementById("modal-editar")) {
             fecharModalEditar();
         }
     });
