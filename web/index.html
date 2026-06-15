@@ -227,6 +227,52 @@
             </div>
         </section>
 
+        <!-- Notas Rápidas - CRUD Independente -->
+        <section class="glass rounded-2xl p-6 mt-5 shadow-lg shadow-amber-500/5 animate-slide-up" style="animation-delay: 0.4s;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                    <i data-lucide="sticky-note" class="w-4 h-4 text-amber-500"></i>
+                    Notas Rápidas
+                </h2>
+                <span class="text-xs font-medium px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300" id="contador-notas">0 notas</span>
+            </div>
+
+            <!-- Form adicionar nota -->
+            <form id="form-nota" class="mb-4">
+                <div class="flex gap-3">
+                    <div class="flex-1 space-y-2">
+                        <input type="text" id="input-nota-titulo" placeholder="Título da nota..."
+                            class="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-sm placeholder:text-gray-400"
+                            required>
+                        <textarea id="input-nota-conteudo" placeholder="Escreva sua nota aqui..." rows="2"
+                            class="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-sm placeholder:text-gray-400 resize-none"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="self-end px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all hover:-translate-y-0.5 active:translate-y-0 text-sm flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Salvar
+                    </button>
+                </div>
+                <!-- Color picker -->
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Cor:</span>
+                    <label class="cursor-pointer"><input type="radio" name="nota-cor" value="yellow" checked class="sr-only peer"><span class="block w-5 h-5 rounded-full bg-yellow-200 border-2 border-transparent peer-checked:border-yellow-500 peer-checked:ring-2 peer-checked:ring-yellow-300 transition-all"></span></label>
+                    <label class="cursor-pointer"><input type="radio" name="nota-cor" value="blue" class="sr-only peer"><span class="block w-5 h-5 rounded-full bg-blue-200 border-2 border-transparent peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-300 transition-all"></span></label>
+                    <label class="cursor-pointer"><input type="radio" name="nota-cor" value="green" class="sr-only peer"><span class="block w-5 h-5 rounded-full bg-emerald-200 border-2 border-transparent peer-checked:border-emerald-500 peer-checked:ring-2 peer-checked:ring-emerald-300 transition-all"></span></label>
+                    <label class="cursor-pointer"><input type="radio" name="nota-cor" value="pink" class="sr-only peer"><span class="block w-5 h-5 rounded-full bg-pink-200 border-2 border-transparent peer-checked:border-pink-500 peer-checked:ring-2 peer-checked:ring-pink-300 transition-all"></span></label>
+                    <label class="cursor-pointer"><input type="radio" name="nota-cor" value="purple" class="sr-only peer"><span class="block w-5 h-5 rounded-full bg-purple-200 border-2 border-transparent peer-checked:border-purple-500 peer-checked:ring-2 peer-checked:ring-purple-300 transition-all"></span></label>
+                </div>
+            </form>
+
+            <!-- Lista de notas (grid) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="lista-notas">
+                <div class="text-center py-8 text-gray-400 dark:text-gray-500 col-span-full" id="notas-vazia">
+                    <i data-lucide="file-text" class="w-10 h-10 mx-auto mb-2 opacity-50"></i>
+                    <span class="block text-sm">Nenhuma nota criada ainda.</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="text-center py-6 mt-6">
             <p class="text-xs text-gray-400 dark:text-gray-500">
@@ -235,7 +281,7 @@
         </footer>
     </div>
 
-    <!-- Modal de Edição -->
+    <!-- Modal de Edição de Tarefa -->
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4" id="modal-editar" hidden>
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="modal-backdrop"></div>
         <div class="relative glass rounded-2xl p-6 w-full max-w-md shadow-2xl animate-scale-in">
@@ -276,6 +322,7 @@
     </div>
 
     <script src="app.js"></script>
+    <script src="notas.js"></script>
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
